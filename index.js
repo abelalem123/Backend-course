@@ -5,6 +5,7 @@ const cors = require('cors')
 
 app.use(cors())
 app.use(express.json())
+app.use(express.static('build'))
 
 let notes = [
     {
@@ -78,7 +79,7 @@ app.get('/api/notes/:id', (request, response) => {
   
     response.json(note)
   })
-const Port=3001
+const Port=process.env.Port||3001
 app.listen(Port,()=>{
     console.log(`server is running on port ${Port}`);
 })
