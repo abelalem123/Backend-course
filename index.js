@@ -93,25 +93,26 @@ app.get('/api/notes/:id', (request, response,next) => {
       important: body.important || false,
       date: new Date(),
     })
-    app.put('/api/notes/:id', (request, response, next) => {
-      const body = request.body
-    
-      const note = {
-        content: body.content,
-        important: body.important,
-      }
-    
-      Note.findByIdAndUpdate(request.params.id, note, { new: true })
-        .then(updatedNote => {
-          response.json(updatedNote)
-        })
-        .catch(error => next(error))
-    })
-  
+   
   note.save().then((savedNote)=>{
 response.json(savedNote)
   })
   })
+  app.put('/api/notes/:id', (request, response, next) => {
+    const body = request.body
+  
+    const note = {
+      content: body.content,
+      important: body.important,
+    }
+  
+    Note.findByIdAndUpdate(request.params.id, note, { new: true })
+      .then(updatedNote => {
+        response.json(updatedNote)
+      })
+      .catch(error => next(error))
+  })
+
 const Port=process.env.PORT
 app.listen(Port,()=>{
     console.log(`server is running on port ${Port}`);
