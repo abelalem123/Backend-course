@@ -1,5 +1,9 @@
 const { request, response } = require('express');
+require('dotenv').config()
+const mongoose = require('mongoose')
 const express =require('express')
+const Note=require('./models/notes')
+
 const app =express();
 const cors = require('cors')
 
@@ -31,7 +35,9 @@ app.get('/',(request,response)=>{
     response.send('<h1>hello worldd</h1>')
 })
 app.get('/api/notes',(request,response)=>{
+   Note.find({}).then((notes)=>{
     response.json(notes)
+   })
 })
 
 app.get('/api/notes/:id', (request, response) => {
@@ -79,7 +85,7 @@ app.get('/api/notes/:id', (request, response) => {
   
     response.json(note)
   })
-const Port=process.env.Port||3001
+const Port=process.env.PORT
 app.listen(Port,()=>{
     console.log(`server is running on port ${Port}`);
 })
