@@ -16,7 +16,9 @@ const errorHandler = (error, request, response, next) => {
   if (error.name === 'CastError') {
     return response.status(400).send({ error: 'malformatted id' })
   } 
-
+  else if(error.name==='Validation Error'){
+    return response.status(400).json({error:error.message})
+  }
   next(error)
 }
 app.use(errorHandler)
@@ -62,7 +64,7 @@ app.get('/api/notes/:id', (request, response,next) => {
       }
     }).catch((error)=>next(error))
   })
-  app.delete('/api/notes/:id', (request, response) => {
+  app.delete('/api/notes/:id', (request, response,next) => {
     
     Note.findByIdAndRemove(request.params.id).then((result)=>{
       response.status(204).end()
@@ -96,13 +98,10 @@ response.json(savedNote)
   })
   app.put('/api/notes/:id', (request, response, next) => {
     const body = request.body
+  const {important,content} =request.body
+    
   
-    const note = {
-      content: body.content,
-      important: body.important,
-    }
-  
-    Note.findByIdAndUpdate(request.params.id, note, { new: true })
+    Note.findByIdAndUpdate(request.params.id, {content,important}, { new: true ,runValidators:true, context:'true'})
       .then(updatedNote => {
         response.json(updatedNote)
       })
